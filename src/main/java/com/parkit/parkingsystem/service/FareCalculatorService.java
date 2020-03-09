@@ -16,6 +16,12 @@ public class FareCalculatorService {
 
         double durationInMilliseconds = ticket.getOutTime().getTime() - ticket.getInTime().getTime();
 
+        // Taking into account the 30-mn free parking
+                durationInMilliseconds = durationInMilliseconds - Fare.FREE_TIME;
+        if (durationInMilliseconds < 0){
+            durationInMilliseconds = 0;
+        }
+
         double duration = Math.round((durationInMilliseconds / Fare.MILLISECONDS_BY_HOUR) * 100.00)/100.00;
 
         switch (ticket.getParkingSpot().getParkingType()){
