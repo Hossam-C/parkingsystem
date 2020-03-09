@@ -12,7 +12,7 @@ public class FareCalculatorService {
 
 
 
-        //TODO: Some tests are failing here. Need to check if this logic is correct
+        //Done TODO: Some tests are failing here. Need to check if this logic is correct
 
         double durationInMilliseconds = ticket.getOutTime().getTime() - ticket.getInTime().getTime();
 
