@@ -86,4 +86,25 @@ public class TicketDAO {
         }
         return false;
     }
+    public int getNumberPaidTicket(String vehicleRegNumber) {
+        Connection con = null;
+        int numberOfTickets = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_NUMBER_PAID_TICKET);
+            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+            ps.setString(1,vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                numberOfTickets = (rs.getInt(1));
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error fetching number of paid tickets",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return numberOfTickets;
+        }
+    }
 }
