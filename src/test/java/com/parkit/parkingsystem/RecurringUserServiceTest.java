@@ -61,7 +61,6 @@ public class RecurringUserServiceTest {
     @Test
     public void testNonRecurrentUser () {
         //GIVEN
-        System.out.println("debut test");
         when(ticketDAOR.getNumberPaidTicket(anyString())).thenReturn(0);
         //WHEN
         recurringUser = new RecurringUserService();
@@ -70,6 +69,8 @@ public class RecurringUserServiceTest {
         //THEN
         assertThat(recurringUser.isRecurringUser("ABCDE")).isEqualTo(false);
     }
+
+
 
 
 }

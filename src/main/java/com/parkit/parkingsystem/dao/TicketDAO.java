@@ -88,6 +88,7 @@ public class TicketDAO {
     }
     public int getNumberPaidTicket(String vehicleRegNumber) {
         Connection con = null;
+        Ticket ticket = null;
         int numberOfTickets = 0;
         try {
             con = dataBaseConfig.getConnection();
@@ -97,6 +98,7 @@ public class TicketDAO {
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 numberOfTickets = (rs.getInt(1));
+                ticket.setNumberOfPaidTicket(numberOfTickets);
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
