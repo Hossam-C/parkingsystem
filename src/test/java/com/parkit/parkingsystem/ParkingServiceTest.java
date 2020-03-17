@@ -43,9 +43,9 @@ public class ParkingServiceTest {
         try {
             lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
-            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
             Ticket ticket = new Ticket();
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
+            ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
             lenient().when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
@@ -54,37 +54,45 @@ public class ParkingServiceTest {
             lenient().when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+            parkingService.setRecurringUSer(recurringUser);
+            lenient().when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
+            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw  new RuntimeException("Failed to set up test mock objects");
+            throw new RuntimeException("Failed to set up test mock objects");
         }
     }
 
     @Test
-    public void processExitingVehicleTest(){
+    public void processExitingVehicleTest() {
+        //when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
+
     @Test
     public void testDisplayMessageRecurringUser() throws Exception {
         //GIVEN
 
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(1);
         when(parkingSpotDAO.updateParking(any())).thenReturn(true);
         when(ticketDAO.saveTicket(any())).thenReturn(true);
-        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
-
+        //when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
         System.setOut(new PrintStream(outContent));
 
         //WHEN
+
         parkingService.processIncomingVehicle();
         //THEN
         System.out.println(outContent);
-        assertTrue( outContent.toString().contains("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."));
+        assertTrue(outContent.toString().contains("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."));
 
 
     }
+
+
 }
