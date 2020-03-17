@@ -5,4 +5,5 @@ public class Fare {
     public static final double CAR_RATE_PER_HOUR = 1.5;
     public static final double MILLISECONDS_BY_HOUR = 3600000.0;
     public static final double FREE_TIME = 1800000;
+    public static final double RECURRING_REDUCTION = 0.05;
 }
