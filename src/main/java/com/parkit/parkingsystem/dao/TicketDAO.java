@@ -98,6 +98,7 @@ public class TicketDAO {
             ps.setString(1, vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                ticket= new Ticket();
                 numberOfTickets = (rs.getInt(1));
                 ticket.setNumberOfPaidTicket(numberOfTickets);
             }
