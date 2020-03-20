@@ -80,7 +80,7 @@ public class ParkingServiceTest {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(1);
         when(parkingSpotDAO.updateParking(any())).thenReturn(true);
-        when(ticketDAO.saveTicket(any())).thenReturn(true);
+        //when(ticketDAO.saveTicket(any())).thenReturn(true);
         //when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
         System.setOut(new PrintStream(outContent));
 
