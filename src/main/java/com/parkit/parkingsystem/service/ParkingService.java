@@ -20,7 +20,7 @@ public class ParkingService {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
-    private RecurringUserService recurringUser;
+    private RecurringUserService recurringUser = new RecurringUserService();
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
         this.inputReaderUtil = inputReaderUtil;
@@ -31,9 +31,19 @@ public class ParkingService {
     public void processIncomingVehicle() {
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
+            //recurringUser = new RecurringUserService();
             if (parkingSpot != null && parkingSpot.getId() > 0) {
                 String vehicleRegNumber = getVehichleRegNumber();
 
+                //Checking that the vehicle is not already in the parcking
+                //ticketDAO.getTicket(vehicleRegNumber);
+                if (ticketDAO.getTicket(vehicleRegNumber) != null && ticketDAO.getTicket(vehicleRegNumber).getOutTime() == null) {
+                    System.out.println("Sorry, but your vehicle is already parked");
+                    //throw new Exception("Sorry, but your vehicle is already parked");
+                    return;
+                }
+
+                recurringUser.setTicketDAOR(ticketDAO);
                 if (recurringUser.isRecurringUser(vehicleRegNumber)) {
                     System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
                 }

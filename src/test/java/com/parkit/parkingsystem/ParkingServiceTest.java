@@ -55,7 +55,7 @@ public class ParkingServiceTest {
 
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
             parkingService.setRecurringUSer(recurringUser);
-            lenient().when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
+            //lenient().when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
 
@@ -79,9 +79,11 @@ public class ParkingServiceTest {
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(1);
-        when(parkingSpotDAO.updateParking(any())).thenReturn(true);
+        when(ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber())).thenReturn(null);
+        //when(parkingSpotDAO.updateParking(any())).thenReturn(true);
         //when(ticketDAO.saveTicket(any())).thenReturn(true);
-        //when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
+        parkingService.setRecurringUSer(recurringUser);
+        when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
         System.setOut(new PrintStream(outContent));
 
         //WHEN
