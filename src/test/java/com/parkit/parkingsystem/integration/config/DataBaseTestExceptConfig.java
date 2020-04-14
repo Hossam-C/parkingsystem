@@ -4,39 +4,19 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.*;
 
-public class DataBaseTestConfig extends DataBaseConfig {
+public class DataBaseTestExceptConfig extends DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
     public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
 
         BufferedReader reader = null;
-        String dbuser = "";
-        String dbpwd = "";
-
-        try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/resources/config"), StandardCharsets.UTF_8.name()));
-            String line = reader.readLine();
-
-            // user
-            dbuser = line;
-
-            // password
-            line = reader.readLine();
-            dbpwd = line;
-        } catch (FileNotFoundException e) {
-            System.out.println("Symptom File not found : please verify the file path.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
+        String dbuser = "test";
+        String dbpwd = "exception";
 
 
         logger.info("Create DB connection");

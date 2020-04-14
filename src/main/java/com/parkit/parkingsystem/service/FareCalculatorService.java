@@ -13,15 +13,14 @@ public class FareCalculatorService {
         }
 
 
-
         //Done TODO: Some tests are failing here. Need to check if this logic is correct
 
 
         double durationInMilliseconds = ticket.getOutTime().getTime() - ticket.getInTime().getTime();
 
         // Taking into account the 30-mn free parking
-                durationInMilliseconds = durationInMilliseconds - Fare.FREE_TIME;
-        if (durationInMilliseconds < 0){
+        durationInMilliseconds = durationInMilliseconds - Fare.FREE_TIME;
+        if (durationInMilliseconds < 0) {
             durationInMilliseconds = 0;
         }
 

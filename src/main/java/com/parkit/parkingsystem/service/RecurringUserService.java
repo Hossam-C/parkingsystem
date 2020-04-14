@@ -1,7 +1,6 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.dao.TicketDAO;
-import com.parkit.parkingsystem.model.Ticket;
 
 public class RecurringUserService {
     TicketDAO ticketDAOR = new TicketDAO();
@@ -12,11 +11,7 @@ public class RecurringUserService {
         int nbTicket = ticketDAOR.getNumberPaidTicket(vehicleRegNumber);
         //int nbTicket = ticket.getNumberOfPaidTicket();
 
-        if (nbTicket >= 1) {
-            recurring = true;
-        } else {
-            recurring = false;
-        }
+        recurring = nbTicket >= 1;
 
         return recurring;
     }

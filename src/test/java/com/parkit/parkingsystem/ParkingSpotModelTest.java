@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -17,14 +18,14 @@ public class ParkingSpotModelTest {
     private static ParkingSpot parkingSpot2;
 
     @BeforeEach
-    private  void setUp() {
+    private void setUp() {
         parkingSpot = new ParkingSpot(3, ParkingType.CAR, true);
         parkingSpot2 = new ParkingSpot(4, ParkingType.BIKE, true);
     }
 
 
     @Test
-    public void testSetterGetterId(){
+    public void testSetterGetterId() {
 
         parkingSpot.setId(1);
 
@@ -32,7 +33,7 @@ public class ParkingSpotModelTest {
     }
 
     @Test
-    public void testSetterGetParkingType(){
+    public void testSetterGetParkingType() {
 
         parkingSpot.setParkingType(ParkingType.CAR);
 
@@ -41,7 +42,7 @@ public class ParkingSpotModelTest {
 
 
     @Test
-    public void testSetterGetisAvalaibleTrue(){
+    public void testSetterGetisAvalaibleTrue() {
 
         parkingSpot.setAvailable(true);
 
@@ -49,7 +50,7 @@ public class ParkingSpotModelTest {
     }
 
     @Test
-    public void testSetterGetisAvalaibleFalse(){
+    public void testSetterGetisAvalaibleFalse() {
 
         parkingSpot.setAvailable(false);
 
@@ -57,16 +58,16 @@ public class ParkingSpotModelTest {
     }
 
     @Test
-    public void testHashCode(){
+    public void testHashCode() {
 
         parkingSpot.hashCode();
-        System.out.println( parkingSpot.hashCode());
+        System.out.println(parkingSpot.hashCode());
 
         assertThat(parkingSpot.hashCode()).isEqualTo(3);
     }
 
     @Test
-    public void testEqualsTrue(){
+    public void testEqualsTrue() {
 
         parkingSpot.equals(parkingSpot);
 
@@ -74,21 +75,14 @@ public class ParkingSpotModelTest {
     }
 
     @Test
-    public void testEqualsFalse(){
-
-        parkingSpot.equals(null);
+    public void testEqualsFalse() {
 
         assertThat(parkingSpot.equals(null)).isEqualTo(false);
     }
 
 
     @Test
-    public void testEqualsReturn(){
-
-        parkingSpot.equals(parkingSpot2);
-
-        //System.out.println("Retour parkingSpot : "+parkingSpot.equals(parkingSpot2));
-
-        assertThat(parkingSpot.equals(null)).isEqualTo(false);
+    public void testEqualsReturn() {
+        assertThat(parkingSpot.equals(parkingSpot2)).isEqualTo(false);
     }
 }

@@ -10,14 +10,13 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.PropertyPermission;
 
 public class ParkingSpotDAO {
     private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public int getNextAvailableSlot(ParkingType parkingType) {
+    public int getNextAvailableSlot(ParkingType parkingType) throws Exception {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -29,10 +28,10 @@ public class ParkingSpotDAO {
             rs = ps.executeQuery();
             if (rs.next()) {
                 result = rs.getInt(1);
-                ;
-            };
+            }
         } catch (Exception ex) {
             logger.error("Error fetching next available slot", ex);
+            throw ex;
         } finally {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
@@ -51,7 +50,7 @@ public class ParkingSpotDAO {
             ps.setBoolean(1, parkingSpot.isAvailable());
             ps.setInt(2, parkingSpot.getId());
             int updateRowCount = ps.executeUpdate();
-            dataBaseConfig.closePreparedStatement(ps);
+            //dataBaseConfig.closePreparedStatement(ps);
             return (updateRowCount == 1);
         } catch (Exception ex) {
             logger.error("Error updating parking info", ex);

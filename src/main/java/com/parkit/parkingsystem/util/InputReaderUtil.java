@@ -8,8 +8,8 @@ import java.util.Scanner;
 
 public class InputReaderUtil {
 
-    private static Scanner scan = new Scanner(System.in, StandardCharsets.UTF_8.name());
     private static final Logger logger = LogManager.getLogger("InputReaderUtil");
+    private static Scanner scan = new Scanner(System.in, StandardCharsets.UTF_8.name());
 
     public int readSelection() {
         try {
@@ -35,6 +35,5 @@ public class InputReaderUtil {
             throw e;
         }
     }
-
 
 }

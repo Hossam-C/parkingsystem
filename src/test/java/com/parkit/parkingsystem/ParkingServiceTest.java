@@ -27,8 +27,6 @@ public class ParkingServiceTest {
 
     private static ParkingService parkingService;
     private static Ticket ticket;
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-
     @Mock
     private static InputReaderUtil inputReaderUtil;
     @Mock
@@ -37,6 +35,7 @@ public class ParkingServiceTest {
     private static TicketDAO ticketDAO;
     @Mock
     private static RecurringUserService recurringUser;
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @BeforeEach
     private void setUpPerTest() {
@@ -49,16 +48,9 @@ public class ParkingServiceTest {
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
             lenient().when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-            lenient().when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
-
-            lenient().when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
             parkingService.setRecurringUSer(recurringUser);
-            //lenient().when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
-            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to set up test mock objects");
@@ -67,34 +59,44 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest() {
-        //when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
+        //GIVEN
+        when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
+
+        //WHEN
         parkingService.processExitingVehicle();
+
+        //THEN
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
 
     @Test
     public void testDisplayMessageRecurringUser() throws Exception {
         //GIVEN
-
-
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(1);
         when(ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber())).thenReturn(null);
-        //when(parkingSpotDAO.updateParking(any())).thenReturn(true);
-        //when(ticketDAO.saveTicket(any())).thenReturn(true);
         parkingService.setRecurringUSer(recurringUser);
         when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
         System.setOut(new PrintStream(outContent));
 
         //WHEN
-
         parkingService.processIncomingVehicle();
+
         //THEN
-        System.out.println(outContent);
         assertTrue(outContent.toString().contains("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."));
-
-
     }
 
+    @Test
+    public void wrongTypeofVehicleTest() {
+        //GIVEN
+        when(inputReaderUtil.readSelection()).thenReturn(3);
 
+        //WHEN
+        System.setOut(new PrintStream(outContent));
+        parkingService.getNextParkingNumberIfAvailable();
+
+        //THEN
+        assertTrue(outContent.toString().contains("Incorrect input provided"));
+
+    }
 }

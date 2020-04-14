@@ -1,24 +1,25 @@
 package com.parkit.parkingsystem;
 
 
-
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class TicketModelTest {
 
     private static Ticket ticket = new Ticket();
-    private static ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,true);
+    private static ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
 
     @Test
-    public void testSetterGetterId(){
+    public void testSetterGetterId() {
 
         ticket.setId(1);
 
@@ -26,7 +27,7 @@ public class TicketModelTest {
     }
 
     @Test
-    public void testSetterGetterParkingSpot(){
+    public void testSetterGetterParkingSpot() {
 
         ticket.setParkingSpot(parkingSpot);
 
@@ -34,7 +35,7 @@ public class TicketModelTest {
     }
 
     @Test
-    public void testSetterGetterVehicleRegNumber(){
+    public void testSetterGetterVehicleRegNumber() {
 
         ticket.setVehicleRegNumber("ABCDEF");
 
@@ -42,7 +43,7 @@ public class TicketModelTest {
     }
 
     @Test
-    public void testSetterGetterPrice(){
+    public void testSetterGetterPrice() {
 
         ticket.setPrice(15);
 
@@ -50,7 +51,7 @@ public class TicketModelTest {
     }
 
     @Test
-    public void testSetterGetterInTime(){
+    public void testSetterGetterInTime() {
 
         Date inTime = new Date();
 
@@ -60,7 +61,7 @@ public class TicketModelTest {
     }
 
     @Test
-    public void testSetterGetterOutTime(){
+    public void testSetterGetterOutTime() {
 
         Date outTime = new Date();
 
@@ -70,7 +71,7 @@ public class TicketModelTest {
     }
 
     @Test
-    public void testSetterGetterNumberOfPaidTicket(){
+    public void testSetterGetterNumberOfPaidTicket() {
 
         ticket.setNumberOfPaidTicket(10);
 

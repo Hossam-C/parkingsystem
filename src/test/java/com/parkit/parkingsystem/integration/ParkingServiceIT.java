@@ -10,7 +10,9 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.service.RecurringUserService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -38,14 +40,11 @@ public class ParkingServiceIT {
 
     private static RecurringUserService recurringUser1;
     private static RecurringUserService recurringUser2;
-
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-
     @Mock
     private static InputReaderUtil inputReaderUtil1;
     @Mock
     private static InputReaderUtil inputReaderUtil2;
-
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @BeforeAll
     private static void setUp() throws Exception {
@@ -63,7 +62,7 @@ public class ParkingServiceIT {
     }
 
     @BeforeEach
-    private  void setUpEach(){
+    private void setUpEach() {
         dataBasePrepareService.clearDataBaseEntries();
     }
 
@@ -146,6 +145,7 @@ public class ParkingServiceIT {
         assertTrue(outContent.toString().contains("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."));
 
     }
+
     @Test
     public void testMultipleEntrancesSameBikeInOutIn() throws Exception {
         when(inputReaderUtil1.readSelection()).thenReturn(2);
@@ -205,8 +205,6 @@ public class ParkingServiceIT {
         //Test1
         // Verification que le ticket du véhicule est bien considéré comme sorti
         assertTrue(ticketVerif1.getOutTime() != null);
-
-
 
 
     }

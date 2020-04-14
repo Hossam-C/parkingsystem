@@ -5,6 +5,7 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.service.RecurringUserService;
@@ -17,7 +18,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 
@@ -29,9 +37,13 @@ public class ParkingDataBaseIT {
     private static TicketDAO ticketDAO;
     private static DataBasePrepareService dataBasePrepareService;
     private static RecurringUserService recurringUser;
-
     @Mock
     private static InputReaderUtil inputReaderUtil;
+    @Mock
+    private static ParkingSpotDAO parkingSpotDAO2;
+    @Mock
+    private static TicketDAO ticketDAO2;
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @BeforeAll
     private static void setUp() throws Exception {
@@ -39,21 +51,23 @@ public class ParkingDataBaseIT {
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
         ticketDAO.dataBaseConfig = dataBaseTestConfig;
+        ticketDAO2 = new TicketDAO();
+        ticketDAO2.dataBaseConfig = dataBaseTestConfig;
         dataBasePrepareService = new DataBasePrepareService();
         recurringUser = new RecurringUserService();
-    }
-
-    @BeforeEach
-    private void setUpPerTest() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        dataBasePrepareService.clearDataBaseEntries();
-        //when(recurringUser.isRecurringUser(anyString())).thenReturn(true);
+        parkingSpotDAO2 = new ParkingSpotDAO();
     }
 
     @AfterAll
     private static void tearDown() {
 
+    }
+
+    @BeforeEach
+    private void setUpPerTest() throws Exception {
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
@@ -99,4 +113,41 @@ public class ParkingDataBaseIT {
         assertThat(ticketVerifSortie.getPrice()).isEqualTo(0);
     }
 
+    @Test
+    public void testParkingACarWithNoPlace() throws Exception {
+        when(parkingSpotDAO2.getNextAvailableSlot(ParkingType.CAR)).thenReturn(0);
+        System.setOut(new PrintStream(outContent));
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO2, ticketDAO);
+        parkingService.processIncomingVehicle();
+
+        assertTrue(outContent.toString().contains("Error fetching next available parking slot"));
+    }
+
+    @Test
+    public void testParkingLotExitWithException() throws Exception {
+
+        ParkingService parkingServiceEntree = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingServiceEntree.setRecurringUSer(recurringUser);
+        parkingServiceEntree.processIncomingVehicle();
+
+        Thread.sleep(2000);
+
+        ParkingService parkingServiceSortie = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO2);
+        parkingServiceSortie.setRecurringUSer(recurringUser);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+
+        Ticket ticket = new Ticket();
+        ticket.setId(1);
+        ticket.setVehicleRegNumber("ABCDEF");
+        ticket.setInTime(new Date());
+        ticket.setParkingSpot(parkingSpot);
+        when(ticketDAO2.getTicket("ABCDEF")).thenReturn(ticket);
+        when(ticketDAO2.updateTicket(any())).thenReturn(false);
+
+        System.setOut(new PrintStream(outContent));
+        parkingServiceSortie.processExitingVehicle();
+        assertTrue(outContent.toString().contains("Unable to update ticket information. Error occurred"));
+
+
+    }
 }

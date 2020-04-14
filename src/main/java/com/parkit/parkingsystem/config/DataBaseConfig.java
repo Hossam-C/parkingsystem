@@ -19,11 +19,11 @@ public class DataBaseConfig {
         String dbpwd = "";
 
         try {
-            reader = new BufferedReader(new InputStreamReader( new FileInputStream("src/main/resources/config"), StandardCharsets.UTF_8.name()));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/resources/config"), StandardCharsets.UTF_8.name()));
             String line = reader.readLine();
 
             // user
-            dbuser = line ;
+            dbuser = line;
 
             // password
             line = reader.readLine();
@@ -37,7 +37,6 @@ public class DataBaseConfig {
                 reader.close();
             }
         }
-
 
 
         logger.info("Create DB connection");

@@ -89,6 +89,7 @@ public class ParkingService {
             logger.error("Error parsing user input for type of vehicle", ie);
         } catch (Exception e) {
             logger.error("Error fetching next available parking slot", e);
+            System.out.println("Error fetching next available parking slot");
         }
         return parkingSpot;
     }

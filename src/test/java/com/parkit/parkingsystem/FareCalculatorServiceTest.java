@@ -12,9 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Date;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.anyString;
@@ -24,10 +22,9 @@ import static org.mockito.Mockito.when;
 public class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
-    private Ticket ticket;
-
     @Mock
     private static RecurringUserService recurringUser;
+    private Ticket ticket;
 
     @BeforeAll
     private static void setUp() {
@@ -107,8 +104,8 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals((0.25 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice() );
-            }
+        assertEquals((0.25 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice());
+    }
 
     @Test
     public void calculateFareCarWithLessThanOneHourParkingTime() {
@@ -121,8 +118,8 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (0.25 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
-            }
+        assertEquals((0.25 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
+    }
 
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime() {
@@ -135,35 +132,35 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (23.5 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals((23.5 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
     }
 
     @Test
-    public void calculateFareCarWithLessThanHalfAnHourParkingTime(){
+    public void calculateFareCarWithLessThanHalfAnHourParkingTime() {
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  15 * 60 * 1000) );//15 mins parking time should give 0.25 * parking fare per hour
+        inTime.setTime(System.currentTimeMillis() - (15 * 60 * 1000));//15 mins parking time should give 0.25 * parking fare per hour
         Date outTime = new Date();
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (0 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals((0 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
     }
 
     @Test
-    public void calculateFareBikeWithLessThanHalfAnHourParkingTime(){
+    public void calculateFareBikeWithLessThanHalfAnHourParkingTime() {
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  15 * 60 * 1000) );//15 mins parking time should give 0.25 * parking fare per hour
+        inTime.setTime(System.currentTimeMillis() - (15 * 60 * 1000));//15 mins parking time should give 0.25 * parking fare per hour
         Date outTime = new Date();
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (0 * Fare.BIKE_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals((0 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice());
     }
 
     @Test
@@ -177,8 +174,6 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
-        //ticket.setNumberOfPaidTicket(2);
 
         fareCalculatorService.calculateFare(ticket);
 
